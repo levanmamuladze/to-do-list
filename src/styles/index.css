@@ -10,3 +10,26 @@
     import 'relative/path/to/stylesheet.scss';
 
 */
+body{
+    background-color: rgb(0, 0, 0);
+    font-size: x-large;
+    
+}
+.liDesing{
+    background-color: rgb(209, 209, 31);
+    border: 1px solid white;
+    font-style: oblique;
+    font-weight: bold;
+}
+.main {
+    color: white;
+}
+ul li{
+    color: black;
+}
+.delete-button{
+    font-size:large;
+   
+}
+
+  

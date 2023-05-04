@@ -17,18 +17,54 @@ const Home = () => {
     setTodoList(data);
   };
 
-  const addTodo = () => {
+  const addTodo = async () => {
     if (newTodo !== "") {
       const checkLetter =
         newTodo.charAt(0).toUpperCase() + newTodo.slice(1).toLowerCase();
-      const newTodoItem = { label: checkLetter };
+      const newTodoItem = { label: checkLetter , done: false};
       const check = todoList.find(todo => todo.label === newTodoItem.label);
       if (check) {
         alert("You can't add two same tasks!");
       } else {
-        setTodoList([...todoList, newTodoItem]);
+        const response = await fetch(
+          "https://assets.breatheco.de/apis/fake/todos/user/levan",
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify([...todoList, newTodoItem])
+          }
+        );
+        const data = await response.json();
+        getTodos();
         setNewTodo("");
-      }}}
+      }
+    }
+  };
+
+  const deleteTodo = async (index) => {
+    const newList = [...todoList];
+    newList.splice(index, 1);
+    
+    const response = await fetch(
+      `https://assets.breatheco.de/apis/fake/todos/user/levan`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newList)
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }else{
+      setTodoList(newList);
+    }
+  };
+
+ 
   return (
     <div className=" container text-center justify-content-center container pt-5 main ">
       <h1>Add tasks to your To-Do-List</h1>
@@ -65,9 +101,8 @@ const Home = () => {
                   <button
                     className="delete-button btn btn-danger button-icon fas fa-trash-alt p-1 "
                     onClick={() => {
-                      const newList = [...todoList];
-                      newList.splice(index, 1);
-                      setTodoList(newList);
+                     deleteTodo(index);
+                  
                     }}
                   ></button>
                 )}
